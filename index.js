@@ -11,11 +11,11 @@ const questions = [
     },
     {
         type: 'input',
-        name: 'text color',
+        name: 'textColor',
         message: 'Enter text color',
     },
     {
-        type: 'checkbox',
+        type: 'choice',
         name: 'shape',
         message: 'Please choose a shape',
         choices: ['Circle', 'Triangle', 'Square'],
@@ -29,6 +29,7 @@ const questions = [
 
 inquirer.prompt(questions).then(answers => {
     let shape;
+    console.log(answers)
     switch (answers.shape) {
         case 'Triangle':
             shape = new Triangle();
@@ -39,18 +40,18 @@ inquirer.prompt(questions).then(answers => {
         case 'Square':
             shape = new Square();
             break;
-        }
-        shape.setColor(answers.shapeColor);
+    }
+    shape.setColor(answers.shapeColor);
+    const svgContent = `
+            <svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
+            ${shape.render()};
+            <text x="200" y="125" font-size="50" text-anchor="middle" fill="${answers.textColor}">${answers.text}</text>
+            </svg>
+            `;
+
+    fs.writeFile('logo.svg', svgContent);
+    console.log('Logo Generated');
 });
 
 
-const svgContent = `
-    <svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
-    ${shape.render()};
-    <text x="200" y="125" font-size="50" text-anchor="middle" fill="${answers.textColor}">${answers.text}</text>
-    </svg>
-    `;
-
-fs.writeFile('logo.svg', svgContent);
-console.log('Logo Generated');
 
